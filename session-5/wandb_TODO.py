@@ -17,7 +17,7 @@ class WandbLogger(Logger):
     def __init__(
         self, 
         task: TaskType, 
-        model: nn.Module
+        model: nn.Module,
     ):
         wandb.login()
         wandb.init(project="hands-on-monitoring")
@@ -30,8 +30,8 @@ class WandbLogger(Logger):
         self, 
         model: nn.Module, 
         epoch: int, 
-        train_loss_avg: float, 
-        val_loss_avg: float, 
+        train_loss_avg: np.ndarray,
+        val_loss_avg: np.ndarray,
         reconstruction_grid: Optional[torch.Tensor] = None,
     ):
 
@@ -97,7 +97,7 @@ class WandbLogger(Logger):
                 # forward img through the encoder
                 image = wandb.Image(img)
                 label = label.item()
-                latent = model.encoder(img.to(device).unsqueeze(dim=0)).squeeze().detach().cpu().numpy().tolist()
+                latent = model.encoder(img.unsqueeze(dim=0)).squeeze().detach().cpu().numpy().tolist()
                 data = [image, label, *latent]
 
                 df = pd.DataFrame([data], columns=columns)
@@ -107,6 +107,10 @@ class WandbLogger(Logger):
         # TODO: Log latent representations (embeddings)
 
 
-    def log_model_graph(self, model, train_loader):
+    def log_model_graph(
+        self,
+        model: nn.Module,
+        train_loader: torch.utils.data.DataLoader,
+    ):
         # Wandb does not support logging the model graph
         pass
