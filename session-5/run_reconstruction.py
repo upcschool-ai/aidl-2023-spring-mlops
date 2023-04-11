@@ -63,7 +63,7 @@ def run_reconstruction(
 ):
 
     if args.log_framework.upper() == LoggerType.TENSORBOARD.name:
-        logger = TensorboardLogger(args.task, model)
+        logger = TensorboardLogger(args.task)
     elif args.log_framework.upper() == LoggerType.WANDB.name:
         logger = WandbLogger(args.task, model)
     else:

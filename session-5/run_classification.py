@@ -76,7 +76,7 @@ def run_classification(
 ):
 
     if args.log_framework.upper() == LoggerType.TENSORBOARD.name:
-        logger = TensorboardLogger(args.task, model)
+        logger = TensorboardLogger(args.task)
     elif args.log_framework.upper() == LoggerType.WANDB.name:
         logger = WandbLogger(args.task, model)
     else:
@@ -107,7 +107,7 @@ def run_classification(
         train_acc_avg = np.mean(train_acc)
 
         logger.log_classification_training(
-            model, epoch, train_loss_avg, val_loss_avg, train_acc_avg, val_acc_avg, fig
+            epoch, train_loss_avg, val_loss_avg, train_acc_avg, val_acc_avg, fig
         )
 
         print(

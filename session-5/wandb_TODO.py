@@ -23,7 +23,7 @@ class WandbLogger(Logger):
         wandb.init(project="hands-on-monitoring")
         wandb.run.name = f'{task}-{datetime.now().strftime("%Y%m%d-%H%M%S")}'
 
-        # TODO: Log weights and gradients to wandb. Doc: https://docs.wandb.ai/ref/python/watch
+        # TODO: Log weights, gradients and graph to wandb. Doc: https://docs.wandb.ai/ref/python/watch
 
 
     def log_reconstruction_training(
@@ -49,12 +49,11 @@ class WandbLogger(Logger):
 
     def log_classification_training(
         self, 
-        model: nn.Module, 
-        epoch: int, 
-        train_loss_avg: float, 
-        val_loss_avg: float, 
-        train_acc_avg: float, 
-        val_acc_avg: float, 
+        epoch: int,
+        train_loss_avg: np.ndarray,
+        val_loss_avg: np.ndarray,
+        train_acc_avg: np.ndarray,
+        val_acc_avg: np.ndarray,
         fig: plt.Figure,
     ):
         # TODO: Log confusion matrix figure to wandb
@@ -112,5 +111,5 @@ class WandbLogger(Logger):
         model: nn.Module,
         train_loader: torch.utils.data.DataLoader,
     ):
-        # Wandb does not support logging the model graph
+        # Graph should be previously logged with wandb.watch()
         pass

@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 from typing import Optional
@@ -9,20 +10,19 @@ class Logger:
         self,
         model: nn.Module,
         epoch: int,
-        train_loss_avg: float,
-        val_loss_avg: float,
+        train_loss_avg: np.ndarray,
+        val_loss_avg: np.ndarray,
         reconstruction_grid: Optional[torch.Tensor] = None,
     ):
         raise NotImplementedError
 
     def log_classification_training(
         self,
-        model: nn.Module,
         epoch: int,
-        train_loss_avg: float,
-        val_loss_avg: float,
-        train_acc_avg: float,
-        val_acc_avg: float,
+        train_loss_avg: np.ndarray,
+        val_loss_avg: np.ndarray,
+        train_acc_avg: np.ndarray,
+        val_acc_avg: np.ndarray,
         fig: plt.Figure,
     ):
         raise NotImplementedError

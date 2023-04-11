@@ -16,7 +16,6 @@ class TensorboardLogger(Logger):
     def __init__(
         self, 
         task: TaskType, 
-        model: nn.Module,
     ):
         # Define the folder where we will store all the tensorboard logs
         logdir = os.path.join("logs", f"{task}-{datetime.now().strftime('%Y%m%d-%H%M%S')}")
@@ -57,8 +56,7 @@ class TensorboardLogger(Logger):
 
     def log_classification_training(
         self, 
-        model: nn.Module, 
-        epoch: int, 
+        epoch: int,
         train_loss_avg: np.ndarray,
         val_loss_avg: np.ndarray,
         train_acc_avg: np.ndarray,
