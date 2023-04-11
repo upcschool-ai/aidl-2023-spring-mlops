@@ -23,8 +23,8 @@ class WandbLogger(Logger):
         wandb.init(project="hands-on-monitoring")
         wandb.run.name = f'{task}-{datetime.now().strftime("%Y%m%d-%H%M%S")}'
 
-        # TODO: Log weights and gradients to wandb. Doc: https://docs.wandb.ai/ref/python/watch
-
+        # TODO: Log weights, gradients and graph to wandb. Doc: https://docs.wandb.ai/ref/python/watch
+        wandb.watch(model, log='all', log_freq=100, log_graph=True)
 
     def log_reconstruction_training(
         self, 
@@ -36,46 +36,41 @@ class WandbLogger(Logger):
     ):
 
         # TODO: Log train reconstruction loss to wandb
-
+        wandb.log({'Reconstruction/train_loss': train_loss_avg})
 
         # TODO: Log validation reconstruction loss to wandb
-
+        wandb.log({'Reconstruction/val_loss': val_loss_avg})
 
         # TODO: Log a batch of reconstructed images from the validation set
-
-
-        pass
+        wandb.log({'recon_images': wandb.Image(reconstruction_grid)})
 
 
     def log_classification_training(
         self, 
         epoch: int,
-        train_loss_avg: float, 
-        val_loss_avg: float, 
-        train_acc_avg: float, 
-        val_acc_avg: float, 
+        train_loss_avg: np.ndarray,
+        val_loss_avg: np.ndarray,
+        train_acc_avg: np.ndarray,
+        val_acc_avg: np.ndarray,
         fig: plt.Figure,
     ):
         # TODO: Log confusion matrix figure to wandb
-
+        wandb.log({'Confusion Matrix': fig})
 
         # TODO: Log validation loss to wandb
         #  Tip: use the tag 'Classification/val_loss'
-
+        wandb.log({'Classification/val_loss': val_loss_avg})
 
         # TODO: Log validation accuracy to wandb
         #  Tip: use the tag 'Classification/val_acc'
-
-
+        wandb.log({'Classification/val_acc': val_acc_avg})
         # TODO: Log training loss to wandb
         #  Tip: use the tag 'Classification/train_loss'
-
+        wandb.log({'Classification/train_loss': train_loss_avg})
 
         # TODO: Log train accuracy to wandb
         #  Tip: use the tag 'Classification/train_acc'
-
-
-        pass
+        wandb.log({'Classification/train_acc': train_acc_avg})
 
     def log_embeddings(
         self, 
@@ -104,6 +99,7 @@ class WandbLogger(Logger):
         embeddings = pd.concat(list_dfs, ignore_index=True)
 
         # TODO: Log latent representations (embeddings)
+        wandb.log({"mnist": embeddings})
 
 
     def log_model_graph(
@@ -111,5 +107,5 @@ class WandbLogger(Logger):
         model: nn.Module,
         train_loader: torch.utils.data.DataLoader,
     ):
-        # Wandb does not support logging the model graph
+        # Already done with wandb.watch()
         pass
